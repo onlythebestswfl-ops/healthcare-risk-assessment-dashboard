@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Risk Assessment Dashboard</title>
+  <meta
+    name="description"
+    content="Interactive healthcare risk assessment dashboard for population health analytics."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">Population Health Analytics</p>
+      <h1>Healthcare Risk Assessment Dashboard</h1>
+      <p class="hero-copy">
+        Advanced population health risk analysis for healthcare advocacy and decision-making.
+      </p>
+    </header>
+
+    <main class="content-grid">
+      <section class="panel form-panel">
+        <div class="panel-heading">
+          <p class="section-tag">Scenario Inputs</p>
+          <h2>Model the risk profile</h2>
+          <p>Enter a care network snapshot to generate a weighted exposure score and guidance tier.</p>
+        </div>
+
+        <form id="risk-form" novalidate>
+          <label class="field">
+            <span>Population</span>
+            <input id="population" name="population" type="number" min="0" step="1" placeholder="e.g., 50000" required>
+          </label>
+
+          <label class="field">
+            <span>Acute Care Facilities</span>
+            <input id="acute-care" name="acuteCare" type="number" min="0" step="1" placeholder="e.g., 2" required>
+          </label>
+
+          <label class="field">
+            <span>Long-Term Care Facilities</span>
+            <input id="long-term-care" name="longTermCare" type="number" min="0" step="1" placeholder="e.g., 5" required>
+          </label>
+
+          <label class="field">
+            <span>Lab Isolates Submitted</span>
+            <input id="lab-isolates" name="labIsolates" type="number" min="0" step="1" placeholder="e.g., 20" required>
+          </label>
+
+          <label class="field">
+            <span>Time Frame</span>
+            <select id="time-frame" name="timeFrame">
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="annual">Annual</option>
+            </select>
+          </label>
+
+          <div class="actions">
+            <button type="submit" class="primary-button">Calculate Risk Assessment</button>
+            <button type="button" class="ghost-button" id="sample-button">Load Sample Data</button>
+          </div>
+
+          <p id="form-message" class="form-message" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel results-panel" aria-live="polite">
+        <div class="results-header">
+          <p class="section-tag">Assessment Output</p>
+          <h2 id="risk-title">Enter data to begin</h2>
+          <p id="risk-summary">Complete the form to generate a comprehensive risk assessment.</p>
+        </div>
+
+        <div class="score-card">
+          <div class="score-ring" id="score-ring">
+            <div>
+              <span class="score-label">Risk Score</span>
+              <strong id="risk-score">--</strong>
+            </div>
+          </div>
+          <div class="score-details">
+            <p class="tier-label">Current Tier</p>
+            <strong id="risk-tier">Awaiting input</strong>
+            <p id="risk-guidance">
+              After calculation, you will see the dominant risk drivers, a response posture, and surveillance notes.
+            </p>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <article class="metric-card">
+            <span>Population pressure</span>
+            <strong id="metric-population">--</strong>
+          </article>
+          <article class="metric-card">
+            <span>Facility load</span>
+            <strong id="metric-facility">--</strong>
+          </article>
+          <article class="metric-card">
+            <span>Surveillance intensity</span>
+            <strong id="metric-surveillance">--</strong>
+          </article>
+          <article class="metric-card">
+            <span>Time factor</span>
+            <strong id="metric-time">--</strong>
+          </article>
+        </div>
+
+        <div class="insight-layout">
+          <article class="insight-card">
+            <h3>Dominant Drivers</h3>
+            <ul id="driver-list">
+              <li>Population density and facility strain will appear here.</li>
+            </ul>
+          </article>
+
+          <article class="insight-card">
+            <h3>Recommended Actions</h3>
+            <ul id="action-list">
+              <li>Operational guidance appears once the model is run.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel methodology-panel">
+        <div class="panel-heading">
+          <p class="section-tag">Assessment Methodology</p>
+          <h2>Weighted risk model</h2>
+        </div>
+        <div class="methodology-list">
+          <article>
+            <h3>Population Density</h3>
+            <p>Measures baseline transmission potential across the population footprint.</p>
+          </article>
+          <article>
+            <h3>Facility Load</h3>
+            <p>Captures acute and long-term care network pressure relative to population served.</p>
+          </article>
+          <article>
+            <h3>Surveillance Intensity</h3>
+            <p>Uses isolate submissions as a signal for monitoring readiness and detection cadence.</p>
+          </article>
+          <article>
+            <h3>Temporal Factors</h3>
+            <p>Applies a reporting multiplier to reflect the sensitivity of monthly, quarterly, and annual snapshots.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

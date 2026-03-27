@@ -1,0 +1,1165 @@
+<html lang="en"><head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      (function() {
+        const originalConsole = window.console;
+        window.console = {
+          log: (...args) => {
+            originalConsole.log(...args);
+            window.parent.postMessage({ type: 'console', message: args.join(' ') }, '*');
+          },
+          error: (...args) => {
+            originalConsole.error(...args);
+            window.parent.postMessage({ type: 'console', message: 'Error: ' + args.join(' ') }, '*');
+          },
+          warn: (...args) => {
+            originalConsole.warn(...args);
+            window.parent.postMessage({ type: 'console', message: 'Warning: ' + args.join(' ') }, '*');
+          }
+        };
+
+        let requestId = 0;
+        let callbacksMap = new Map();
+        let streamControllers = new Map();
+        
+        window.claude = {
+          complete: (prompt) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'claudeComplete', id, prompt }, '*');
+            });
+          }
+        };
+
+        window.storage = {
+          get: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageGet', id, key, shared }, '*');
+            });
+          },
+          set: (key, value, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageSet', id, key, value, shared }, '*');
+            });
+          },
+          delete: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageDelete', id, key, shared }, '*');
+            });
+          },
+          list: (prefix, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = requestId++;
+              callbacksMap.set(id, { resolve, reject });
+              window.parent.postMessage({ type: 'storageList', id, prefix, shared }, '*');
+            });
+          }
+        };
+
+        let pendingBlobs = new Map();
+        URL.createObjectURL = (blob) => {
+          // Store the blob and create an ID and URL for it
+          const blobId = `blob-${Date.now()}-${Math.random()}`;
+          pendingBlobs.set(blobId, blob);
+          return `blob-request://${blobId}`;
+        };
+
+        URL.revokeObjectURL = (url) => {
+          // Remove the blob from our store
+          const blobId = url.replace("blob-request://", "");
+          pendingBlobs.delete(blobId);
+        };
+
+        const getBlobFromURL = (url) => {
+          const blobId = url.replace("blob-request://", "");
+          return pendingBlobs.get(blobId);
+        };
+
+        // Override global fetch with streaming support
+        window.fetch = (url, init = {}) => {
+          return new Promise((resolve, reject) => {
+            const id = requestId++;
+            const channelId = `fetch-${id}-${Date.now()}`;
+            
+            callbacksMap.set(id, { 
+              resolve: (response) => {
+                // Create a ReadableStream for the response body
+                const stream = new ReadableStream({
+                  start(controller) {
+                    streamControllers.set(channelId, controller);
+                  },
+                  cancel() {
+                    streamControllers.delete(channelId);
+                  }
+                });
+                
+                // Create and return the Response with the stream
+                resolve(new Response(stream, {
+                  status: response.status,
+                  statusText: response.statusText,
+                  headers: response.headers
+                }));
+              },
+              reject,
+              channelId
+            });
+            
+            window.parent.postMessage({
+              type: 'proxyFetch',
+              id,
+              url,
+              init,
+              channelId
+            }, '*');
+          });
+        };
+
+        window.addEventListener('message', async (event) => {
+          if (event.data.type === 'takeScreenshot') {
+            const rootElement = document.getElementById('artifacts-component-root-html');
+            if (!rootElement) {
+              window.parent.postMessage({
+                type: 'screenshotError',
+                error: new Error('Root element not found'),
+              }, '*');
+            }
+            const screenshot = await htmlToImage.toPng(rootElement, {
+              imagePlaceholder:
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePDgwX8ACOQDoNsk0PMAAAAASUVORK5CYII=",
+            });
+            window.parent.postMessage({
+              type: 'screenshotData',
+              data: screenshot,
+            }, '*');
+          } else if (event.data.type === 'claudeComplete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.completion);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'proxyFetchResponse') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+              callbacksMap.delete(event.data.id);
+            } else {
+              // Initial response with headers, status, etc.
+              callback.resolve({
+                status: event.data.status,
+                statusText: event.data.statusText,
+                headers: event.data.headers
+              });
+              // Don't delete the callback yet if streaming
+              if (!event.data.body) {
+                callbacksMap.delete(event.data.id);
+              }
+            }
+          } else if (event.data.type === 'proxyFetchStream') {
+            // Handle streaming data chunks
+            const controller = streamControllers.get(event.data.channelId);
+            if (controller) {
+              if (event.data.error) {
+                controller.error(new Error(event.data.error));
+                streamControllers.delete(event.data.channelId);
+              } else if (event.data.done) {
+                controller.close();
+                streamControllers.delete(event.data.channelId);
+                // Clean up the callback
+                const callback = Array.from(callbacksMap.entries()).find(
+                  ([_, value]) => value.channelId === event.data.channelId
+                );
+                if (callback) {
+                  callbacksMap.delete(callback[0]);
+                }
+              } else if (event.data.chunk) {
+                controller.enqueue(new Uint8Array(event.data.chunk));
+              }
+            }
+          } else if (event.data.type === 'storageGet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageSet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageDelete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageList') {
+            const callback = callbacksMap.get(event.data.id);
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          }
+        });
+
+        window.addEventListener('click', (event) => {
+          const isEl = event.target instanceof HTMLElement;
+          if (!isEl) return;
+    
+          // find ancestor links
+          const linkEl = event.target.closest("a");
+          if (!linkEl || !linkEl.href) return;
+    
+          event.preventDefault();
+          event.stopImmediatePropagation();
+    
+          if (linkEl.href.startsWith("blob-request:")) {
+            const blob = getBlobFromURL(linkEl.href);
+            if (!blob) return;
+            void blob.arrayBuffer().then((data) => {
+              window.parent.postMessage({
+                type: "downloadFile",
+                filename: linkEl.download,
+                data,
+                mimeType: blob.type || "application/octet-stream",
+              });
+            });
+          } else if (linkEl.href.startsWith("data:")) {
+            const [header, base64Data] = linkEl.href.split(",");
+            const mimeMatch = header.match(/data:([^;]+)/);
+            const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+            const binaryString = atob(base64Data);
+            const data = Uint8Array.from(binaryString, (c) =>
+              c.charCodeAt(0),
+            ).buffer;
+            window.parent.postMessage({
+              type: "downloadFile",
+              filename: linkEl.download,
+              data,
+              mimeType,
+            });
+          } else {
+            let linkUrl;
+            try {
+              linkUrl = new URL(linkEl.href);
+            } catch (error) {
+              return;
+            }
+    
+            if (linkUrl.hostname === window.location.hostname) return;
+      
+            window.parent.postMessage({
+              type: 'openExternal',
+              href: linkEl.href,
+            }, '*');
+          }
+      });
+
+        const originalOpen = window.open;
+        window.open = function (url) {
+          window.parent.postMessage({
+            type: "openExternal",
+            href: url,
+          }, "*");
+        };
+
+        window.addEventListener('error', (event) => {
+          window.parent.postMessage({ type: 'console', message: 'Uncaught Error: ' + event.message }, '*');
+        });
+      })();
+    </script>
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Risk Assessment Dashboard | Navigating The Grey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;family=Source+Sans+3:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --sage-50: #f8faf8;
+            --sage-100: #e8f0e8;
+            --sage-200: #d1e0d1;
+            --sage-300: #a8c8a8;
+            --sage-400: #7ba67b;
+            --sage-500: #5a8a5a;
+            --sage-600: #487448;
+            --sage-700: #3d5f3d;
+            --sage-800: #2d452d;
+            --sage-900: #1e2f1e;
+            --cream: #fefdfb;
+            --warm-gray: #8b8680;
+            --terracotta: #c07855;
+            --gold: #d4af37;
+            --alert-red: #dc2626;
+            --alert-orange: #ea580c;
+            --alert-yellow: #d97706;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--sage-50) 100%);
+            color: var(--sage-900);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--sage-800);
+            color: var(--cream);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--sage-200);
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        .input-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(90, 138, 90, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .results-panel {
+            display: grid;
+            gap: 2rem;
+            grid-template-rows: auto auto 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--sage-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--sage-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: var(--sage-50);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--sage-500);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(90, 138, 90, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--sage-600), var(--sage-500));
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(90, 138, 90, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .risk-score-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(90, 138, 90, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-score-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--sage-500);
+            transition: background 0.3s ease;
+        }
+
+        .risk-score-card.high::before { background: var(--alert-red); }
+        .risk-score-card.moderate::before { background: var(--alert-orange); }
+        .risk-score-card.low::before { background: var(--sage-500); }
+
+        .risk-score {
+            font-size: 4rem;
+            font-weight: 600;
+            font-family: 'Crimson Text', serif;
+            margin-bottom: 0.5rem;
+            color: var(--sage-700);
+            transition: color 0.3s ease;
+        }
+
+        .risk-level {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .risk-description {
+            color: var(--warm-gray);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(90, 138, 90, 0.08);
+            border-left: 4px solid var(--sage-400);
+        }
+
+        .metric-card h3 {
+            font-size: 0.9rem;
+            color: var(--sage-600);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--sage-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-unit {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+        }
+
+        .analysis-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(90, 138, 90, 0.1);
+        }
+
+        .analysis-section h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            color: var(--sage-800);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--sage-200);
+            padding-bottom: 0.5rem;
+        }
+
+        .risk-factors {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .risk-factor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--sage-50);
+            border-radius: 8px;
+            border-left: 4px solid var(--sage-400);
+        }
+
+        .risk-factor.high { border-left-color: var(--alert-red); }
+        .risk-factor.moderate { border-left-color: var(--alert-orange); }
+        .risk-factor.low { border-left-color: var(--sage-500); }
+
+        .factor-name {
+            font-weight: 500;
+            color: var(--sage-700);
+        }
+
+        .factor-impact {
+            font-size: 0.9rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .factor-impact.high {
+            background: var(--alert-red);
+            color: white;
+        }
+
+        .factor-impact.moderate {
+            background: var(--alert-orange);
+            color: white;
+        }
+
+        .factor-impact.low {
+            background: var(--sage-500);
+            color: white;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, var(--sage-100), var(--sage-50));
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .recommendations h3 {
+            color: var(--sage-800);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .recommendations ul {
+            list-style: none;
+        }
+
+        .recommendations li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--sage-700);
+        }
+
+        .recommendations li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--sage-500);
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 2rem;
+        }
+
+        .export-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--sage-200);
+            text-align: center;
+        }
+
+        .export-btn {
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 0.5rem;
+        }
+
+        .export-btn:hover {
+            background: #a66342;
+            transform: translateY(-1px);
+        }
+
+        .methodology {
+            background: var(--sage-100);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            border: 1px solid var(--sage-200);
+        }
+
+        .methodology h3 {
+            color: var(--sage-800);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .methodology p {
+            color: var(--sage-700);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .input-panel {
+                position: relative;
+                top: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .risk-score {
+                font-size: 3rem;
+            }
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body id="artifacts-component-root-html">
+    <header class="header">
+        <h1>Healthcare Risk Assessment Dashboard</h1>
+        <p>Advanced population health risk analysis for healthcare advocacy and decision-making</p>
+    </header>
+
+    <div class="container">
+        <div class="input-panel">
+            <form id="riskForm">
+                <div class="form-group">
+                    <label for="population">Population</label>
+                    <input type="number" id="population" placeholder="e.g., 50000" required="" style="">
+                </div>
+
+                <div class="form-group">
+                    <label for="acuteCare">Acute Care Facilities</label>
+                    <input type="number" id="acuteCare" placeholder="e.g., 2" required="" style="">
+                </div>
+
+                <div class="form-group">
+                    <label for="longTermCare">Long-Term Care Facilities</label>
+                    <input type="number" id="longTermCare" placeholder="e.g., 5" required="" style="">
+                </div>
+
+                <div class="form-group">
+                    <label for="isolates">Lab Isolates Submitted</label>
+                    <input type="number" id="isolates" placeholder="e.g., 150" required="" style="">
+                </div>
+
+                <div class="form-group">
+                    <label for="timeFrame">Time Frame</label>
+                    <select id="timeFrame" required="" style="width: 100%; padding: 0.75rem; border: 2px solid var(--sage-200); border-radius: 8px; font-size: 1rem; background: var(--sage-50);">
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="annual">Annual</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Risk Assessment</button>
+            </form>
+
+            <div class="methodology">
+                <h3>Assessment Methodology</h3>
+                <p>This tool uses a multi-factor risk model that considers:</p>
+                <p><strong>Population Density:</strong> Baseline transmission potential</p>
+                <p><strong>Facility Load:</strong> Healthcare system capacity strain</p>
+                <p><strong>Surveillance Intensity:</strong> Disease detection and reporting</p>
+                <p><strong>Temporal Factors:</strong> Seasonal and reporting variations</p>
+            </div>
+        </div>
+
+        <div class="results-panel">
+            <div class="risk-score-card" id="riskScoreCard">
+                <div class="risk-score" id="riskScore">--</div>
+                <div class="risk-level" id="riskLevel">Enter Data to Begin</div>
+                <div class="risk-description" id="riskDescription">
+                    Complete the form to generate a comprehensive risk assessment
+                </div>
+            </div>
+
+            <div class="metrics-grid" id="metricsGrid" style="display: none;">
+                <div class="metric-card">
+                    <h3>Facility Density</h3>
+                    <div class="metric-value" id="facilityDensity">--</div>
+                    <div class="metric-unit">per 10,000 population</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Surveillance Rate</h3>
+                    <div class="metric-value" id="surveillanceRate">--</div>
+                    <div class="metric-unit">isolates per 1,000</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Acute Care Load</h3>
+                    <div class="metric-value" id="acuteLoad">--</div>
+                    <div class="metric-unit">population per facility</div>
+                </div>
+                <div class="metric-card">
+                    <h3>LTC Vulnerability</h3>
+                    <div class="metric-value" id="ltcVulnerability">--</div>
+                    <div class="metric-unit">coverage index</div>
+                </div>
+            </div>
+
+            <div class="analysis-section" id="analysisSection" style="display: none;">
+                <h2>Risk Factor Analysis</h2>
+                
+                <div class="risk-factors" id="riskFactors">
+                    <!-- Risk factors will be populated here -->
+                </div>
+
+                <div class="recommendations" id="recommendations">
+                    <!-- Recommendations will be populated here -->
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+
+                <div class="export-section">
+                    <button class="export-btn" onclick="exportToPDF()">Export PDF Report</button>
+                    <button class="export-btn" onclick="exportToCSV()">Export Data (CSV)</button>
+                    <button class="export-btn" onclick="shareResults()">Share Results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = {};
+        let riskChart = null;
+
+        document.getElementById('riskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateRisk();
+        });
+
+        function calculateRisk() {
+            const form = document.getElementById('riskForm');
+            form.classList.add('loading');
+
+            // Get input values
+            const population = parseInt(document.getElementById('population').value);
+            const acuteCare = parseInt(document.getElementById('acuteCare').value);
+            const longTermCare = parseInt(document.getElementById('longTermCare').value);
+            const isolates = parseInt(document.getElementById('isolates').value);
+            const timeFrame = document.getElementById('timeFrame').value;
+
+            // Calculate normalized metrics
+            const facilityDensity = ((acuteCare + longTermCare) / population) * 10000;
+            const surveillanceRate = (isolates / population) * 1000;
+            const acuteLoad = population / (acuteCare || 1);
+            const ltcVulnerability = calculateLTCVulnerability(longTermCare, population);
+
+            // Time frame adjustment factors
+            const timeAdjustment = {
+                'monthly': 12,
+                'quarterly': 4,
+                'annual': 1
+            };
+
+            const adjustedSurveillance = surveillanceRate * timeAdjustment[timeFrame];
+
+            // Advanced risk calculation with multiple models
+            const riskFactors = {
+                populationDensity: Math.min(Math.log10(population / 1000) / 2, 1),
+                facilityStrain: Math.min(facilityDensity / 5, 1),
+                surveillanceIntensity: Math.min(adjustedSurveillance / 50, 1),
+                capacityPressure: Math.min(acuteLoad / 25000, 1),
+                vulnerablePopulation: Math.min(ltcVulnerability / 3, 1)
+            };
+
+            // Weighted composite score
+            const weights = {
+                populationDensity: 0.15,
+                facilityStrain: 0.25,
+                surveillanceIntensity: 0.35,
+                capacityPressure: 0.15,
+                vulnerablePopulation: 0.10
+            };
+
+            let compositeScore = 0;
+            Object.keys(riskFactors).forEach(factor => {
+                compositeScore += riskFactors[factor] * weights[factor];
+            });
+
+            // Apply non-linear scaling for more intuitive interpretation
+            const finalScore = Math.pow(compositeScore, 0.8) * 100;
+
+            currentData = {
+                population,
+                acuteCare,
+                longTermCare,
+                isolates,
+                timeFrame,
+                facilityDensity,
+                surveillanceRate: adjustedSurveillance,
+                acuteLoad,
+                ltcVulnerability,
+                riskFactors,
+                finalScore
+            };
+
+            // Simulate brief calculation delay for better UX
+            setTimeout(() => {
+                updateDisplay();
+                form.classList.remove('loading');
+            }, 800);
+        }
+
+        function calculateLTCVulnerability(ltcFacilities, population) {
+            // Estimate average LTC capacity and calculate coverage
+            const avgLTCCapacity = 80;
+            const ltcBeds = ltcFacilities * avgLTCCapacity;
+            const elderlyPopulation = population * 0.16; // Approximate 16% elderly
+            return (ltcBeds / elderlyPopulation) * 100;
+        }
+
+        function updateDisplay() {
+            const { finalScore, facilityDensity, surveillanceRate, acuteLoad, ltcVulnerability, riskFactors } = currentData;
+
+            // Update risk score display
+            const riskScoreElement = document.getElementById('riskScore');
+            const riskLevelElement = document.getElementById('riskLevel');
+            const riskDescriptionElement = document.getElementById('riskDescription');
+            const riskScoreCard = document.getElementById('riskScoreCard');
+
+            riskScoreElement.textContent = Math.round(finalScore);
+
+            let riskLevel, riskClass, description;
+            if (finalScore >= 70) {
+                riskLevel = 'High Risk';
+                riskClass = 'high';
+                description = 'Elevated risk indicators suggest immediate attention and enhanced surveillance protocols are warranted.';
+            } else if (finalScore >= 40) {
+                riskLevel = 'Moderate Risk';
+                riskClass = 'moderate';
+                description = 'Several risk factors present. Monitor closely and consider targeted interventions.';
+            } else {
+                riskLevel = 'Low Risk';
+                riskClass = 'low';
+                description = 'Risk factors within acceptable ranges. Maintain standard monitoring protocols.';
+            }
+
+            riskLevelElement.textContent = riskLevel;
+            riskDescriptionElement.textContent = description;
+            riskScoreCard.className = `risk-score-card ${riskClass}`;
+
+            // Update metrics
+            document.getElementById('facilityDensity').textContent = facilityDensity.toFixed(1);
+            document.getElementById('surveillanceRate').textContent = surveillanceRate.toFixed(1);
+            document.getElementById('acuteLoad').textContent = Math.round(acuteLoad).toLocaleString();
+            document.getElementById('ltcVulnerability').textContent = ltcVulnerability.toFixed(1);
+
+            // Show hidden sections
+            document.getElementById('metricsGrid').style.display = 'grid';
+            document.getElementById('analysisSection').style.display = 'block';
+
+            // Add fade-in animation
+            document.getElementById('metricsGrid').classList.add('fade-in');
+            document.getElementById('analysisSection').classList.add('fade-in');
+
+            updateRiskFactors();
+            updateRecommendations(riskClass);
+            updateChart();
+        }
+
+        function updateRiskFactors() {
+            const { riskFactors } = currentData;
+            const riskFactorsContainer = document.getElementById('riskFactors');
+
+            const factorLabels = {
+                populationDensity: 'Population Density',
+                facilityStrain: 'Healthcare Facility Load',
+                surveillanceIntensity: 'Disease Surveillance',
+                capacityPressure: 'System Capacity Pressure',
+                vulnerablePopulation: 'Vulnerable Population Coverage'
+            };
+
+            riskFactorsContainer.innerHTML = '';
+
+            Object.keys(riskFactors).forEach(factor => {
+                const value = riskFactors[factor];
+                let impactLevel, impactClass;
+
+                if (value >= 0.7) {
+                    impactLevel = 'High';
+                    impactClass = 'high';
+                } else if (value >= 0.4) {
+                    impactLevel = 'Moderate';
+                    impactClass = 'moderate';
+                } else {
+                    impactLevel = 'Low';
+                    impactClass = 'low';
+                }
+
+                const factorDiv = document.createElement('div');
+                factorDiv.className = `risk-factor ${impactClass}`;
+                factorDiv.innerHTML = `
+                    <span class="factor-name">${factorLabels[factor]}</span>
+                    <span class="factor-impact ${impactClass}">${impactLevel}</span>
+                `;
+
+                riskFactorsContainer.appendChild(factorDiv);
+            });
+        }
+
+        function updateRecommendations(riskClass) {
+            const recommendationsContainer = document.getElementById('recommendations');
+            
+            const recommendations = {
+                high: {
+                    title: 'Immediate Action Required',
+                    items: [
+                        'Implement enhanced infection control measures',
+                        'Increase surveillance and testing frequency',
+                        'Consider temporary capacity restrictions',
+                        'Activate emergency response protocols',
+                        'Enhance staff screening and protective measures'
+                    ]
+                },
+                moderate: {
+                    title: 'Recommended Actions',
+                    items: [
+                        'Strengthen routine surveillance protocols',
+                        'Review facility capacity management',
+                        'Enhance inter-facility communication',
+                        'Monitor vulnerable population groups',
+                        'Prepare contingency response plans'
+                    ]
+                },
+                low: {
+                    title: 'Maintenance Actions',
+                    items: [
+                        'Continue standard monitoring protocols',
+                        'Maintain routine infection control practices',
+                        'Regular review of surveillance data',
+                        'Keep emergency response plans current',
+                        'Monitor for changing risk factors'
+                    ]
+                }
+            };
+
+            const rec = recommendations[riskClass];
+            recommendationsContainer.innerHTML = `
+                <h3>${rec.title}</h3>
+                <ul>
+                    ${rec.items.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            `;
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            
+            if (riskChart) {
+                riskChart.destroy();
+            }
+
+            const { riskFactors } = currentData;
+            
+            riskChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Population\nDensity',
+                        'Facility\nLoad',
+                        'Disease\nSurveillance',
+                        'Capacity\nPressure',
+                        'Vulnerable\nPopulation'
+                    ],
+                    datasets: [{
+                        label: 'Risk Factors',
+                        data: Object.values(riskFactors).map(v => v * 100),
+                        backgroundColor: 'rgba(90, 138, 90, 0.2)',
+                        borderColor: 'rgba(90, 138, 90, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(90, 138, 90, 0.8)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(90, 138, 90, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(90, 138, 90, 0.1)'
+                            },
+                            angleLines: {
+                                color: 'rgba(90, 138, 90, 0.2)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12
+                                },
+                                color: '#3d5f3d'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function exportToPDF() {
+            // This would integrate with a PDF generation library
+            alert('PDF export functionality would be implemented with jsPDF or similar library');
+        }
+
+        function exportToCSV() {
+            if (!currentData.finalScore) {
+                alert('Please calculate risk assessment first');
+                return;
+            }
+
+            const csvData = [
+                ['Metric', 'Value', 'Unit'],
+                ['Population', currentData.population, 'people'],
+                ['Acute Care Facilities', currentData.acuteCare, 'facilities'],
+                ['Long-Term Care Facilities', currentData.longTermCare, 'facilities'],
+                ['Lab Isolates', currentData.isolates, 'isolates'],
+                ['Time Frame', currentData.timeFrame, ''],
+                ['Risk Score', Math.round(currentData.finalScore), 'points'],
+                ['Facility Density', currentData.facilityDensity.toFixed(1), 'per 10,000'],
+                ['Surveillance Rate', currentData.surveillanceRate.toFixed(1), 'per 1,000'],
+                ['Acute Care Load', Math.round(currentData.acuteLoad), 'people per facility'],
+                ['LTC Vulnerability', currentData.ltcVulnerability.toFixed(1), 'coverage index']
+            ];
+
+            const csvContent = csvData.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'healthcare_risk_assessment.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function shareResults() {
+            if (!currentData.finalScore) {
+                alert('Please calculate risk assessment first');
+                return;
+            }
+
+            const shareText = `Healthcare Risk Assessment Results:
+Risk Score: ${Math.round(currentData.finalScore)}/100
+Population: ${currentData.population.toLocaleString()}
+Facilities: ${currentData.acuteCare + currentData.longTermCare}
+Assessment completed using advanced population health analytics`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Healthcare Risk Assessment',
+                    text: shareText
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Results copied to clipboard');
+                });
+            }
+        }
+    </script>
+
+</body></html>

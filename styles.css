@@ -1,0 +1,356 @@
+:root {
+  --bg: #f2efe8;
+  --panel: rgba(255, 252, 246, 0.9);
+  --panel-border: rgba(47, 78, 47, 0.14);
+  --headline: #274629;
+  --body: #445247;
+  --muted: #6a766b;
+  --accent: #365f39;
+  --accent-soft: #dce7d9;
+  --high: #a94231;
+  --medium: #d88a2a;
+  --low: #3b7a57;
+  --shadow: 0 24px 60px rgba(39, 70, 41, 0.12);
+  --radius-xl: 30px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--body);
+  background:
+    radial-gradient(circle at top left, rgba(205, 223, 196, 0.8), transparent 28%),
+    radial-gradient(circle at top right, rgba(244, 213, 177, 0.55), transparent 24%),
+    linear-gradient(180deg, #eef3e8 0%, var(--bg) 42%, #ebe5d8 100%);
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 48px;
+}
+
+.hero {
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(135deg, rgba(34, 62, 36, 0.97), rgba(57, 96, 58, 0.92)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
+  color: #f7f3e9;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow,
+.section-tag,
+.tier-label,
+.score-label,
+.metric-card span {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.hero h1,
+.panel h2,
+.insight-card h3,
+.methodology-list h3 {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  font-weight: 700;
+  color: var(--headline);
+}
+
+.hero h1 {
+  margin-top: 10px;
+  color: #fff7ea;
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+  line-height: 0.95;
+  max-width: 12ch;
+}
+
+.hero-copy {
+  margin: 18px 0 0;
+  max-width: 52ch;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(247, 243, 233, 0.8);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.panel {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-xl);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.form-panel,
+.results-panel,
+.methodology-panel {
+  padding: 28px;
+}
+
+.panel-heading p,
+.results-header p {
+  margin: 0;
+}
+
+.panel-heading h2,
+.results-header h2 {
+  margin-top: 8px;
+  font-size: 1.85rem;
+}
+
+.panel-heading > p:last-child,
+.results-header > p:last-child {
+  margin-top: 10px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+#risk-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span {
+  font-weight: 700;
+  color: var(--headline);
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid rgba(55, 93, 57, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--body);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(54, 95, 57, 0.6);
+  box-shadow: 0 0 0 4px rgba(54, 95, 57, 0.12);
+  transform: translateY(-1px);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primary-button,
+.ghost-button {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--accent), #4b794e);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(54, 95, 57, 0.25);
+}
+
+.ghost-button {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.primary-button:hover,
+.ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.form-message {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.results-panel {
+  display: grid;
+  gap: 24px;
+}
+
+.score-card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.score-ring {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at center, rgba(255, 251, 242, 0.98) 0 56%, transparent 57%),
+    conic-gradient(var(--accent) 0deg, rgba(70, 92, 72, 0.14) 0deg);
+}
+
+.score-ring::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(54, 95, 57, 0.1);
+}
+
+.score-ring > div {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+#risk-score {
+  display: block;
+  margin-top: 8px;
+  font-size: 2.8rem;
+  color: var(--headline);
+}
+
+.score-details strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.8rem;
+  color: var(--headline);
+}
+
+.score-details p:last-child {
+  margin-top: 10px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.metric-grid,
+.insight-layout,
+.methodology-list {
+  display: grid;
+  gap: 14px;
+}
+
+.metric-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metric-card,
+.insight-card,
+.methodology-list article {
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(55, 93, 57, 0.12);
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.4rem;
+  color: var(--headline);
+}
+
+.insight-layout {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.insight-card h3 {
+  font-size: 1.25rem;
+}
+
+.insight-card ul {
+  margin: 14px 0 0;
+  padding-left: 18px;
+  line-height: 1.75;
+}
+
+.methodology-panel {
+  grid-column: 1 / -1;
+}
+
+.methodology-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 22px;
+}
+
+.methodology-list article p {
+  margin: 10px 0 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 980px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .methodology-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 10px;
+  }
+
+  .hero,
+  .form-panel,
+  .results-panel,
+  .methodology-panel {
+    padding: 22px;
+  }
+
+  .score-card,
+  .insight-layout,
+  .metric-grid,
+  .methodology-list {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    max-width: 8ch;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}
