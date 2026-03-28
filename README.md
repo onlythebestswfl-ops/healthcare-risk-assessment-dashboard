@@ -9,6 +9,7 @@ The original rescued artifact has been preserved in `sourced-artifact.html`, but
 now a cleaner v1 architecture prototype that:
 
 - narrows scope to targeted healthcare-associated MDRO events
+- treats county-level layers as statewide-only, with no county left behind
 - separates signal severity, spread potential, containment fragility, and confidence
 - escalates posture conservatively when key local data are weak or missing
 - can apply official county hospital and nursing-home counts from FloridaHealthFinder
@@ -22,8 +23,11 @@ now a cleaner v1 architecture prototype that:
 - `V1_ARCHITECTURE.md`: architecture notes and source anchors
 - `REFERENCES.md`: formal source register and maintenance notes
 - `DATA_SOURCES.md`: lightweight capture list for likely data inputs
+- `COUNTY_STANDARD.md`: statewide county coverage rule
 - `data/florida_county_facility_context.json`: generated county hospital/nursing-home context
+- `schemas/florida_county_facility_context.schema.json`: current county context schema
 - `scripts/fetch_florida_facility_context.py`: refresh script for official county facility context
+- `scripts/validate_florida_county_context.py`: statewide coverage validator
 - `sourced-artifact.html`: preserved extracted Claude artifact
 
 ## Local preview
