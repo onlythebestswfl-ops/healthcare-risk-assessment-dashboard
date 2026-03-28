@@ -19,6 +19,7 @@ now a cleaner v1 architecture prototype that:
 - `app.js`: transparent rubric and response-posture logic
 - `styles.css`: dashboard styling
 - `V1_ARCHITECTURE.md`: architecture notes and source anchors
+- `REFERENCES.md`: formal source register and maintenance notes
 - `sourced-artifact.html`: preserved extracted Claude artifact
 
 ## Local preview
