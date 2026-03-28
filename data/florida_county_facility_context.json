@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-28T00:56:57.737332+00:00",
+  "generated_at_utc": "2026-03-28T03:53:35.854978+00:00",
   "source": {
     "name": "FloridaHealthFinder Facility Search",
     "url": "https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch",
@@ -10,8 +10,22 @@
       "Long-term care context currently uses FacilityType=Nursing-Home."
     ]
   },
+  "population_source": {
+    "name": "U.S. Census Bureau County Population Totals: 2020-2025",
+    "url": "https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html",
+    "dataset": "https://www2.census.gov/programs-surveys/popest/tables/2020-2025/counties/totals/co-est2025-pop-12.xlsx",
+    "notes": [
+      "Population values come from the Florida county file for Vintage 2025.",
+      "The county-level resident estimate used in the app is the July 1, 2025 estimate."
+    ]
+  },
   "counties": {
     "Alachua": {
+      "population": {
+        "resident_estimate": 290028,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 1766
@@ -22,6 +36,11 @@
       }
     },
     "Baker": {
+      "population": {
+        "resident_estimate": 29737,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 1163
@@ -32,6 +51,11 @@
       }
     },
     "Bay": {
+      "population": {
+        "resident_estimate": 204479,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 796
@@ -42,6 +66,11 @@
       }
     },
     "Bradford": {
+      "population": {
+        "resident_estimate": 28307,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 5
@@ -52,6 +81,11 @@
       }
     },
     "Brevard": {
+      "population": {
+        "resident_estimate": 663982,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 11,
         "licensed_beds": 1632
@@ -62,6 +96,11 @@
       }
     },
     "Broward": {
+      "population": {
+        "resident_estimate": 2013317,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 25,
         "licensed_beds": 6751
@@ -72,6 +111,11 @@
       }
     },
     "Calhoun": {
+      "population": {
+        "resident_estimate": 13289,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 18
@@ -82,6 +126,11 @@
       }
     },
     "Charlotte": {
+      "population": {
+        "resident_estimate": 217212,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 512
@@ -92,6 +141,11 @@
       }
     },
     "Citrus": {
+      "population": {
+        "resident_estimate": 171666,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 3,
         "licensed_beds": 368
@@ -102,6 +156,11 @@
       }
     },
     "Clay": {
+      "population": {
+        "resident_estimate": 239593,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 4,
         "licensed_beds": 742
@@ -112,6 +171,11 @@
       }
     },
     "Collier": {
+      "population": {
+        "resident_estimate": 417131,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 7,
         "licensed_beds": 1215
@@ -122,6 +186,11 @@
       }
     },
     "Columbia": {
+      "population": {
+        "resident_estimate": 74094,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 177
@@ -132,6 +201,11 @@
       }
     },
     "Desoto": {
+      "population": {
+        "resident_estimate": 37078,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 49
@@ -142,6 +216,11 @@
       }
     },
     "Dixie": {
+      "population": {
+        "resident_estimate": 18038,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -152,6 +231,11 @@
       }
     },
     "Duval": {
+      "population": {
+        "resident_estimate": 1062963,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 19,
         "licensed_beds": 4600
@@ -162,6 +246,11 @@
       }
     },
     "Escambia": {
+      "population": {
+        "resident_estimate": 333834,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 1668
@@ -172,6 +261,11 @@
       }
     },
     "Flagler": {
+      "population": {
+        "resident_estimate": 140360,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 199
@@ -182,6 +276,11 @@
       }
     },
     "Franklin": {
+      "population": {
+        "resident_estimate": 13029,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 25
@@ -192,6 +291,11 @@
       }
     },
     "Gadsden": {
+      "population": {
+        "resident_estimate": 44298,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 953
@@ -202,6 +306,11 @@
       }
     },
     "Gilchrist": {
+      "population": {
+        "resident_estimate": 20488,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -212,6 +321,11 @@
       }
     },
     "Glades": {
+      "population": {
+        "resident_estimate": 13270,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -222,6 +336,11 @@
       }
     },
     "Gulf": {
+      "population": {
+        "resident_estimate": 15943,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 19
@@ -232,6 +351,11 @@
       }
     },
     "Hamilton": {
+      "population": {
+        "resident_estimate": 14180,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -242,6 +366,11 @@
       }
     },
     "Hardee": {
+      "population": {
+        "resident_estimate": 25932,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 25
@@ -252,6 +381,11 @@
       }
     },
     "Hendry": {
+      "population": {
+        "resident_estimate": 48276,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 25
@@ -262,6 +396,11 @@
       }
     },
     "Hernando": {
+      "population": {
+        "resident_estimate": 221701,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 740
@@ -272,6 +411,11 @@
       }
     },
     "Highlands": {
+      "population": {
+        "resident_estimate": 111122,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 3,
         "licensed_beds": 330
@@ -282,6 +426,11 @@
       }
     },
     "Hillsborough": {
+      "population": {
+        "resident_estimate": 1574115,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 20,
         "licensed_beds": 5067
@@ -292,6 +441,11 @@
       }
     },
     "Holmes": {
+      "population": {
+        "resident_estimate": 20119,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 20
@@ -302,6 +456,11 @@
       }
     },
     "Indian River": {
+      "population": {
+        "resident_estimate": 172799,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 3,
         "licensed_beds": 557
@@ -312,6 +471,11 @@
       }
     },
     "Jackson": {
+      "population": {
+        "resident_estimate": 49629,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 100
@@ -322,6 +486,11 @@
       }
     },
     "Jefferson": {
+      "population": {
+        "resident_estimate": 16007,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -332,6 +501,11 @@
       }
     },
     "Lafayette": {
+      "population": {
+        "resident_estimate": 8792,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -342,6 +516,11 @@
       }
     },
     "Lake": {
+      "population": {
+        "resident_estimate": 456068,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 7,
         "licensed_beds": 1093
@@ -352,6 +531,11 @@
       }
     },
     "Lee": {
+      "population": {
+        "resident_estimate": 875607,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 9,
         "licensed_beds": 2191
@@ -362,6 +546,11 @@
       }
     },
     "Leon": {
+      "population": {
+        "resident_estimate": 299048,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 1225
@@ -372,6 +561,11 @@
       }
     },
     "Levy": {
+      "population": {
+        "resident_estimate": 48520,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -382,6 +576,11 @@
       }
     },
     "Liberty": {
+      "population": {
+        "resident_estimate": 8035,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -392,6 +591,11 @@
       }
     },
     "Madison": {
+      "population": {
+        "resident_estimate": 18759,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 25
@@ -402,6 +606,11 @@
       }
     },
     "Manatee": {
+      "population": {
+        "resident_estimate": 468200,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 899
@@ -412,6 +621,11 @@
       }
     },
     "Marion": {
+      "population": {
+        "resident_estimate": 442660,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 7,
         "licensed_beds": 1189
@@ -422,6 +636,11 @@
       }
     },
     "Martin": {
+      "population": {
+        "resident_estimate": 166272,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 4,
         "licensed_beds": 499
@@ -432,6 +651,11 @@
       }
     },
     "Miami-Dade": {
+      "population": {
+        "resident_estimate": 2802029,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 35,
         "licensed_beds": 9830
@@ -442,6 +666,11 @@
       }
     },
     "Monroe": {
+      "population": {
+        "resident_estimate": 80406,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 4,
         "licensed_beds": 200
@@ -452,6 +681,11 @@
       }
     },
     "Nassau": {
+      "population": {
+        "resident_estimate": 106879,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 62
@@ -462,6 +696,11 @@
       }
     },
     "Okaloosa": {
+      "population": {
+        "resident_estimate": 221810,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 534
@@ -472,6 +711,11 @@
       }
     },
     "Okeechobee": {
+      "population": {
+        "resident_estimate": 42608,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 100
@@ -482,6 +726,11 @@
       }
     },
     "Orange": {
+      "population": {
+        "resident_estimate": 1528002,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 21,
         "licensed_beds": 5142
@@ -492,6 +741,11 @@
       }
     },
     "Osceola": {
+      "population": {
+        "resident_estimate": 481718,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 7,
         "licensed_beds": 1315
@@ -502,6 +756,11 @@
       }
     },
     "Palm Beach": {
+      "population": {
+        "resident_estimate": 1575726,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 20,
         "licensed_beds": 4538
@@ -512,6 +771,11 @@
       }
     },
     "Pasco": {
+      "population": {
+        "resident_estimate": 674516,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 11,
         "licensed_beds": 1653
@@ -522,6 +786,11 @@
       }
     },
     "Pinellas": {
+      "population": {
+        "resident_estimate": 948563,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 17,
         "licensed_beds": 4053
@@ -532,6 +801,11 @@
       }
     },
     "Polk": {
+      "population": {
+        "resident_estimate": 874790,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 8,
         "licensed_beds": 1896
@@ -542,6 +816,11 @@
       }
     },
     "Putnam": {
+      "population": {
+        "resident_estimate": 77734,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 99
@@ -552,6 +831,11 @@
       }
     },
     "Santa Rosa": {
+      "population": {
+        "resident_estimate": 211115,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 3,
         "licensed_beds": 231
@@ -562,6 +846,11 @@
       }
     },
     "Sarasota": {
+      "population": {
+        "resident_estimate": 479958,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 8,
         "licensed_beds": 1658
@@ -572,6 +861,11 @@
       }
     },
     "Seminole": {
+      "population": {
+        "resident_estimate": 491884,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 7,
         "licensed_beds": 1040
@@ -582,6 +876,11 @@
       }
     },
     "St. Johns": {
+      "population": {
+        "resident_estimate": 346328,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 3,
         "licensed_beds": 431
@@ -592,6 +891,11 @@
       }
     },
     "St. Lucie": {
+      "population": {
+        "resident_estimate": 402449,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 5,
         "licensed_beds": 1085
@@ -602,6 +906,11 @@
       }
     },
     "Sumter": {
+      "population": {
+        "resident_estimate": 157772,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 4,
         "licensed_beds": 445
@@ -612,6 +921,11 @@
       }
     },
     "Suwannee": {
+      "population": {
+        "resident_estimate": 48149,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 2
@@ -622,6 +936,11 @@
       }
     },
     "Taylor": {
+      "population": {
+        "resident_estimate": 21210,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 25
@@ -632,6 +951,11 @@
       }
     },
     "Union": {
+      "population": {
+        "resident_estimate": 16250,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 145
@@ -642,6 +966,11 @@
       }
     },
     "Volusia": {
+      "population": {
+        "resident_estimate": 606573,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 11,
         "licensed_beds": 1772
@@ -652,6 +981,11 @@
       }
     },
     "Wakulla": {
+      "population": {
+        "resident_estimate": 38089,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 0,
         "licensed_beds": 0
@@ -662,6 +996,11 @@
       }
     },
     "Walton": {
+      "population": {
+        "resident_estimate": 93288,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 2,
         "licensed_beds": 88
@@ -672,6 +1011,11 @@
       }
     },
     "Washington": {
+      "population": {
+        "resident_estimate": 26695,
+        "estimate_year": 2025,
+        "estimate_date": "2025-07-01"
+      },
       "acute_care_hospitals": {
         "facility_count": 1,
         "licensed_beds": 59

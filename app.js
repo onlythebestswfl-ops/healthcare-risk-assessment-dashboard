@@ -186,9 +186,9 @@ async function loadCountyContext() {
     }
     countyContext = await response.json();
     setCountyOptions(countyContext);
-    contextNote.textContent = `Official county facility context ready. Source: ${countyContext.source.name} (${new Date(countyContext.generated_at_utc).toLocaleDateString()}).`;
+    contextNote.textContent = `Official county context ready. Facilities from ${countyContext.source.name}; population from ${countyContext.population_source.name}.`;
   } catch (error) {
-    contextNote.textContent = "Official county facility context could not be loaded in this session.";
+    contextNote.textContent = "Official county context could not be loaded in this session.";
   }
 }
 
@@ -437,10 +437,11 @@ function applyOfficialCountyContext() {
   }
 
   const context = countyContext.counties[county];
+  fields.population.value = `${context.population.resident_estimate}`;
   fields.acuteCare.value = `${context.acute_care_hospitals.facility_count}`;
   fields.longTermCare.value = `${context.nursing_homes.facility_count}`;
-  contextNote.textContent = `${county}: ${context.acute_care_hospitals.facility_count} hospitals (${context.acute_care_hospitals.licensed_beds.toLocaleString()} licensed beds) and ${context.nursing_homes.facility_count} nursing homes (${context.nursing_homes.licensed_beds.toLocaleString()} licensed beds) from FloridaHealthFinder.`;
-  formMessage.textContent = "Official county facility context applied.";
+  contextNote.textContent = `${county}: population ${context.population.resident_estimate.toLocaleString()} (U.S. Census Vintage ${context.population.estimate_year}), ${context.acute_care_hospitals.facility_count} hospitals (${context.acute_care_hospitals.licensed_beds.toLocaleString()} licensed beds), and ${context.nursing_homes.facility_count} nursing homes (${context.nursing_homes.licensed_beds.toLocaleString()} licensed beds).`;
+  formMessage.textContent = "Official county population and facility context applied.";
 }
 
 function updateResults(result) {

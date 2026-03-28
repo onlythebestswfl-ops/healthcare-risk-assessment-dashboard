@@ -12,7 +12,7 @@ now a cleaner v1 architecture prototype that:
 - treats county-level layers as statewide-only, with no county left behind
 - separates signal severity, spread potential, containment fragility, and confidence
 - escalates posture conservatively when key local data are weak or missing
-- can apply official county hospital and nursing-home counts from FloridaHealthFinder
+- can apply official county population, hospital, and nursing-home context from Census and FloridaHealthFinder
 - links back to official CDC, Florida DOH, AHCA, and CMS source anchors
 
 ## Files

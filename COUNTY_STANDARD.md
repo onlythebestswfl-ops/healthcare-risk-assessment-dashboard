@@ -30,6 +30,9 @@ A new county-level layer can be promoted into the app only when:
 
 The current county context layer satisfies the rule for all `67` counties with these fields:
 
+- `population.resident_estimate`
+- `population.estimate_year`
+- `population.estimate_date`
 - `acute_care_hospitals.facility_count`
 - `acute_care_hospitals.licensed_beds`
 - `nursing_homes.facility_count`
@@ -38,6 +41,7 @@ The current county context layer satisfies the rule for all `67` counties with t
 Source path:
 
 - official FloridaHealthFinder county-filtered facility search
+- official U.S. Census Bureau county population totals, Vintage 2025
 
 Validation path:
 

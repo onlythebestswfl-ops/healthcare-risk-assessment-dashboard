@@ -210,9 +210,24 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Why it matters:
   - likely useful for licensed beds dashboards and quick-download operational data
 
+### 15. U.S. Census Bureau County Population Totals: 2020-2025
+
+- Title: `County Population Totals: 2020-2025 | U.S. Census Bureau`
+- URL: <https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html>
+- Dataset file: <https://www2.census.gov/programs-surveys/popest/tables/2020-2025/counties/totals/co-est2025-pop-12.xlsx>
+- Type: `public dataset`
+- Status in prototype: `active`
+- Publication date on source page: `March 2026`
+- Why it matters:
+  - current integrated source for statewide Florida county population context
+  - supplies the July 1, 2025 resident estimate for all 67 counties
+- Notes:
+  - current county context layer uses the Florida Vintage 2025 workbook
+  - best fit for population scale and denominator context, not pathogen-specific logic
+
 ## D. CMS Public Data
 
-### 15. CMS Data Available to Everyone
+### 16. CMS Data Available to Everyone
 
 - Title: `Data Available to Everyone | CMS`
 - URL: <https://www.cms.gov/data-research/cms-data/data-available-everyone>
@@ -225,7 +240,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Notes:
   - Core source for future provider and facility enrichment
 
-### 16. CMS Provider Data Catalog
+### 17. CMS Provider Data Catalog
 
 - Title: `Provider Data Catalog | CMS`
 - URL: <https://data.cms.gov/provider-data/>
@@ -237,7 +252,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Notes:
   - Should be used with dataset-specific dictionaries and methodologies
 
-### 17. CMS Nursing Home Data Dictionary
+### 18. CMS Nursing Home Data Dictionary
 
 - Title: `Nursing Home Care Compare and Provider Data Catalog Data Dictionary`
 - URL: <https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf>
@@ -247,7 +262,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Why it matters:
   - useful if nursing home capacity, staffing, or quality fields are added
 
-### 18. CMS Provider Specific Data for Public Use
+### 19. CMS Provider Specific Data for Public Use
 
 - Title: `Provider Specific Data for Public Use in Text Format | CMS`
 - URL: <https://www.cms.gov/medicare/payment/prospective-payment-systems/provider-specific-data-public-use-text-format>

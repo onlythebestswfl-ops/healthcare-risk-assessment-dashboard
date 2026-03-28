@@ -17,6 +17,9 @@ EXPECTED_COUNTIES = [
 ]
 
 EXPECTED_FIELDS = [
+    ("population", "resident_estimate"),
+    ("population", "estimate_year"),
+    ("population", "estimate_date"),
     ("acute_care_hospitals", "facility_count"),
     ("acute_care_hospitals", "licensed_beds"),
     ("nursing_homes", "facility_count"),
@@ -33,10 +36,10 @@ def main():
     extra_counties = [county for county in counties if county not in EXPECTED_COUNTIES]
 
     if missing_counties:
-      raise SystemExit(f"Missing counties: {', '.join(missing_counties)}")
+        raise SystemExit(f"Missing counties: {', '.join(missing_counties)}")
 
     if extra_counties:
-      raise SystemExit(f"Unexpected counties: {', '.join(extra_counties)}")
+        raise SystemExit(f"Unexpected counties: {', '.join(extra_counties)}")
 
     for county in EXPECTED_COUNTIES:
         county_record = counties[county]
@@ -46,6 +49,10 @@ def main():
             if field not in county_record[section]:
                 raise SystemExit(f"{county} missing field {section}.{field}")
             value = county_record[section][field]
+            if field == "estimate_date":
+                if not isinstance(value, str) or len(value) != 10:
+                    raise SystemExit(f"{county} has invalid field {section}.{field}: {value!r}")
+                continue
             if not isinstance(value, int):
                 raise SystemExit(f"{county} has non-integer field {section}.{field}: {value!r}")
 

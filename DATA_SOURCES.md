@@ -10,6 +10,11 @@ Reviewed March 27-28, 2026.
 
 ### Florida / AHCA
 
+- U.S. Census Bureau County Population Totals: 2020-2025
+  - <https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html>
+  - Dataset: <https://www2.census.gov/programs-surveys/popest/tables/2020-2025/counties/totals/co-est2025-pop-12.xlsx>
+  - Use case: current integrated statewide Florida county population estimates
+
 - FloridaHealthFinder Facility Locate Search
   - <https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch>
   - Use case: current integrated source for county-level hospital and nursing-home counts
