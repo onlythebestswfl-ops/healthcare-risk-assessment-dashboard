@@ -10,6 +10,10 @@ Reviewed March 27-28, 2026.
 
 ### Florida / AHCA
 
+- FloridaHealthFinder Facility Locate Search
+  - <https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch>
+  - Use case: current integrated source for county-level hospital and nursing-home counts
+
 - AHCA Office of Data Dissemination and Transparency
   - <https://ahca.myflorida.com/agency-administration/florida-center-for-health-information-and-transparency/office-of-data-dissemination-and-transparency>
   - Use case: hospital, emergency department, and related Florida facility/public data access

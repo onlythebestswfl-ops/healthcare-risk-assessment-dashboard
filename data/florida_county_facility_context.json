@@ -1,0 +1,685 @@
+{
+  "generated_at_utc": "2026-03-28T00:56:57.737332+00:00",
+  "source": {
+    "name": "FloridaHealthFinder Facility Search",
+    "url": "https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch",
+    "handler": "https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch?handler=AdvancedSearch",
+    "notes": [
+      "Counts generated from official county-filtered advanced search responses.",
+      "Acute care context currently uses FacilityType=Hospital.",
+      "Long-term care context currently uses FacilityType=Nursing-Home."
+    ]
+  },
+  "counties": {
+    "Alachua": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 1766
+      },
+      "nursing_homes": {
+        "facility_count": 9,
+        "licensed_beds": 1272
+      }
+    },
+    "Baker": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 1163
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 188
+      }
+    },
+    "Bay": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 796
+      },
+      "nursing_homes": {
+        "facility_count": 8,
+        "licensed_beds": 933
+      }
+    },
+    "Bradford": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 5
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 240
+      }
+    },
+    "Brevard": {
+      "acute_care_hospitals": {
+        "facility_count": 11,
+        "licensed_beds": 1632
+      },
+      "nursing_homes": {
+        "facility_count": 21,
+        "licensed_beds": 2819
+      }
+    },
+    "Broward": {
+      "acute_care_hospitals": {
+        "facility_count": 25,
+        "licensed_beds": 6751
+      },
+      "nursing_homes": {
+        "facility_count": 32,
+        "licensed_beds": 4382
+      }
+    },
+    "Calhoun": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 18
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 246
+      }
+    },
+    "Charlotte": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 512
+      },
+      "nursing_homes": {
+        "facility_count": 9,
+        "licensed_beds": 1260
+      }
+    },
+    "Citrus": {
+      "acute_care_hospitals": {
+        "facility_count": 3,
+        "licensed_beds": 368
+      },
+      "nursing_homes": {
+        "facility_count": 9,
+        "licensed_beds": 1103
+      }
+    },
+    "Clay": {
+      "acute_care_hospitals": {
+        "facility_count": 4,
+        "licensed_beds": 742
+      },
+      "nursing_homes": {
+        "facility_count": 11,
+        "licensed_beds": 1260
+      }
+    },
+    "Collier": {
+      "acute_care_hospitals": {
+        "facility_count": 7,
+        "licensed_beds": 1215
+      },
+      "nursing_homes": {
+        "facility_count": 11,
+        "licensed_beds": 876
+      }
+    },
+    "Columbia": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 177
+      },
+      "nursing_homes": {
+        "facility_count": 4,
+        "licensed_beds": 418
+      }
+    },
+    "Desoto": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 49
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 118
+      }
+    },
+    "Dixie": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 60
+      }
+    },
+    "Duval": {
+      "acute_care_hospitals": {
+        "facility_count": 19,
+        "licensed_beds": 4600
+      },
+      "nursing_homes": {
+        "facility_count": 33,
+        "licensed_beds": 4344
+      }
+    },
+    "Escambia": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 1668
+      },
+      "nursing_homes": {
+        "facility_count": 16,
+        "licensed_beds": 2003
+      }
+    },
+    "Flagler": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 199
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 240
+      }
+    },
+    "Franklin": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 25
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 90
+      }
+    },
+    "Gadsden": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 953
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 120
+      }
+    },
+    "Gilchrist": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 201
+      }
+    },
+    "Glades": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      }
+    },
+    "Gulf": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 19
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 120
+      }
+    },
+    "Hamilton": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 60
+      }
+    },
+    "Hardee": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 25
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 79
+      }
+    },
+    "Hendry": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 25
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 248
+      }
+    },
+    "Hernando": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 740
+      },
+      "nursing_homes": {
+        "facility_count": 6,
+        "licensed_beds": 769
+      }
+    },
+    "Highlands": {
+      "acute_care_hospitals": {
+        "facility_count": 3,
+        "licensed_beds": 330
+      },
+      "nursing_homes": {
+        "facility_count": 5,
+        "licensed_beds": 598
+      }
+    },
+    "Hillsborough": {
+      "acute_care_hospitals": {
+        "facility_count": 20,
+        "licensed_beds": 5067
+      },
+      "nursing_homes": {
+        "facility_count": 30,
+        "licensed_beds": 3947
+      }
+    },
+    "Holmes": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 20
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 180
+      }
+    },
+    "Indian River": {
+      "acute_care_hospitals": {
+        "facility_count": 3,
+        "licensed_beds": 557
+      },
+      "nursing_homes": {
+        "facility_count": 6,
+        "licensed_beds": 674
+      }
+    },
+    "Jackson": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 100
+      },
+      "nursing_homes": {
+        "facility_count": 4,
+        "licensed_beds": 540
+      }
+    },
+    "Jefferson": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 157
+      }
+    },
+    "Lafayette": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 60
+      }
+    },
+    "Lake": {
+      "acute_care_hospitals": {
+        "facility_count": 7,
+        "licensed_beds": 1093
+      },
+      "nursing_homes": {
+        "facility_count": 16,
+        "licensed_beds": 1737
+      }
+    },
+    "Lee": {
+      "acute_care_hospitals": {
+        "facility_count": 9,
+        "licensed_beds": 2191
+      },
+      "nursing_homes": {
+        "facility_count": 19,
+        "licensed_beds": 2226
+      }
+    },
+    "Leon": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 1225
+      },
+      "nursing_homes": {
+        "facility_count": 7,
+        "licensed_beds": 937
+      }
+    },
+    "Levy": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 120
+      }
+    },
+    "Liberty": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      }
+    },
+    "Madison": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 25
+      },
+      "nursing_homes": {
+        "facility_count": 3,
+        "licensed_beds": 238
+      }
+    },
+    "Manatee": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 899
+      },
+      "nursing_homes": {
+        "facility_count": 13,
+        "licensed_beds": 1595
+      }
+    },
+    "Marion": {
+      "acute_care_hospitals": {
+        "facility_count": 7,
+        "licensed_beds": 1189
+      },
+      "nursing_homes": {
+        "facility_count": 12,
+        "licensed_beds": 1620
+      }
+    },
+    "Martin": {
+      "acute_care_hospitals": {
+        "facility_count": 4,
+        "licensed_beds": 499
+      },
+      "nursing_homes": {
+        "facility_count": 7,
+        "licensed_beds": 833
+      }
+    },
+    "Miami-Dade": {
+      "acute_care_hospitals": {
+        "facility_count": 35,
+        "licensed_beds": 9830
+      },
+      "nursing_homes": {
+        "facility_count": 54,
+        "licensed_beds": 8274
+      }
+    },
+    "Monroe": {
+      "acute_care_hospitals": {
+        "facility_count": 4,
+        "licensed_beds": 200
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 240
+      }
+    },
+    "Nassau": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 62
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 240
+      }
+    },
+    "Okaloosa": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 534
+      },
+      "nursing_homes": {
+        "facility_count": 8,
+        "licensed_beds": 899
+      }
+    },
+    "Okeechobee": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 100
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 210
+      }
+    },
+    "Orange": {
+      "acute_care_hospitals": {
+        "facility_count": 21,
+        "licensed_beds": 5142
+      },
+      "nursing_homes": {
+        "facility_count": 37,
+        "licensed_beds": 4600
+      }
+    },
+    "Osceola": {
+      "acute_care_hospitals": {
+        "facility_count": 7,
+        "licensed_beds": 1315
+      },
+      "nursing_homes": {
+        "facility_count": 10,
+        "licensed_beds": 1200
+      }
+    },
+    "Palm Beach": {
+      "acute_care_hospitals": {
+        "facility_count": 20,
+        "licensed_beds": 4538
+      },
+      "nursing_homes": {
+        "facility_count": 54,
+        "licensed_beds": 6185
+      }
+    },
+    "Pasco": {
+      "acute_care_hospitals": {
+        "facility_count": 11,
+        "licensed_beds": 1653
+      },
+      "nursing_homes": {
+        "facility_count": 18,
+        "licensed_beds": 2209
+      }
+    },
+    "Pinellas": {
+      "acute_care_hospitals": {
+        "facility_count": 17,
+        "licensed_beds": 4053
+      },
+      "nursing_homes": {
+        "facility_count": 66,
+        "licensed_beds": 7612
+      }
+    },
+    "Polk": {
+      "acute_care_hospitals": {
+        "facility_count": 8,
+        "licensed_beds": 1896
+      },
+      "nursing_homes": {
+        "facility_count": 25,
+        "licensed_beds": 3178
+      }
+    },
+    "Putnam": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 99
+      },
+      "nursing_homes": {
+        "facility_count": 3,
+        "licensed_beds": 337
+      }
+    },
+    "Santa Rosa": {
+      "acute_care_hospitals": {
+        "facility_count": 3,
+        "licensed_beds": 231
+      },
+      "nursing_homes": {
+        "facility_count": 4,
+        "licensed_beds": 410
+      }
+    },
+    "Sarasota": {
+      "acute_care_hospitals": {
+        "facility_count": 8,
+        "licensed_beds": 1658
+      },
+      "nursing_homes": {
+        "facility_count": 29,
+        "licensed_beds": 3062
+      }
+    },
+    "Seminole": {
+      "acute_care_hospitals": {
+        "facility_count": 7,
+        "licensed_beds": 1040
+      },
+      "nursing_homes": {
+        "facility_count": 10,
+        "licensed_beds": 1234
+      }
+    },
+    "St. Johns": {
+      "acute_care_hospitals": {
+        "facility_count": 3,
+        "licensed_beds": 431
+      },
+      "nursing_homes": {
+        "facility_count": 8,
+        "licensed_beds": 750
+      }
+    },
+    "St. Lucie": {
+      "acute_care_hospitals": {
+        "facility_count": 5,
+        "licensed_beds": 1085
+      },
+      "nursing_homes": {
+        "facility_count": 9,
+        "licensed_beds": 1140
+      }
+    },
+    "Sumter": {
+      "acute_care_hospitals": {
+        "facility_count": 4,
+        "licensed_beds": 445
+      },
+      "nursing_homes": {
+        "facility_count": 4,
+        "licensed_beds": 432
+      }
+    },
+    "Suwannee": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 2
+      },
+      "nursing_homes": {
+        "facility_count": 3,
+        "licensed_beds": 401
+      }
+    },
+    "Taylor": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 25
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 120
+      }
+    },
+    "Union": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 145
+      },
+      "nursing_homes": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      }
+    },
+    "Volusia": {
+      "acute_care_hospitals": {
+        "facility_count": 11,
+        "licensed_beds": 1772
+      },
+      "nursing_homes": {
+        "facility_count": 28,
+        "licensed_beds": 3367
+      }
+    },
+    "Wakulla": {
+      "acute_care_hospitals": {
+        "facility_count": 0,
+        "licensed_beds": 0
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 120
+      }
+    },
+    "Walton": {
+      "acute_care_hospitals": {
+        "facility_count": 2,
+        "licensed_beds": 88
+      },
+      "nursing_homes": {
+        "facility_count": 2,
+        "licensed_beds": 277
+      }
+    },
+    "Washington": {
+      "acute_care_hospitals": {
+        "facility_count": 1,
+        "licensed_beds": 59
+      },
+      "nursing_homes": {
+        "facility_count": 1,
+        "licensed_beds": 180
+      }
+    }
+  }
+}

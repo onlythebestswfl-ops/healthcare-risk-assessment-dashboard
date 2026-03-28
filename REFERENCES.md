@@ -177,7 +177,21 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
   - PDF summary, not the whole universe of Florida care settings
   - likely best paired with other AHCA or CMS facility data
 
-### 12. AHCA Hospitals Program Page
+### 12. FloridaHealthFinder Facility Locate Search
+
+- Title: `FloridaHealthFinder | Locate Facility`
+- URL: <https://quality.healthfinder.fl.gov/Facility-Search/FacilityLocateSearch>
+- Type: `public dataset interface`
+- Status in prototype: `active`
+- Why it matters:
+  - current integrated source for county-level hospital and nursing-home counts
+  - supports generated county context file used by the dashboard
+- Notes:
+  - current repo script posts to the official advanced-search handler and captures county-filtered results
+  - acute care context currently uses `FacilityType=Hospital`
+  - long-term care context currently uses `FacilityType=Nursing-Home`
+
+### 13. AHCA Hospitals Program Page
 
 - Title: `Hospitals | Florida Agency for Health Care Administration`
 - URL: <https://ahca.myflorida.com/health-care-policy-and-oversight/bureau-of-health-facility-regulation/hospital-outpatient-services-unit/hospitals>
@@ -187,7 +201,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
   - supports what counts as a licensed hospital in Florida
   - useful for later facility-type normalization
 
-### 13. AHCA Frequently Requested Data
+### 14. AHCA Frequently Requested Data
 
 - Title: `Frequently Requested Data | AHCA`
 - URL: <https://ahca.myflorida.com/health-quality-assurance/bureau-of-central-services/frequently-requested-data>
@@ -198,7 +212,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 
 ## D. CMS Public Data
 
-### 14. CMS Data Available to Everyone
+### 15. CMS Data Available to Everyone
 
 - Title: `Data Available to Everyone | CMS`
 - URL: <https://www.cms.gov/data-research/cms-data/data-available-everyone>
@@ -211,7 +225,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Notes:
   - Core source for future provider and facility enrichment
 
-### 15. CMS Provider Data Catalog
+### 16. CMS Provider Data Catalog
 
 - Title: `Provider Data Catalog | CMS`
 - URL: <https://data.cms.gov/provider-data/>
@@ -223,7 +237,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Notes:
   - Should be used with dataset-specific dictionaries and methodologies
 
-### 16. CMS Nursing Home Data Dictionary
+### 17. CMS Nursing Home Data Dictionary
 
 - Title: `Nursing Home Care Compare and Provider Data Catalog Data Dictionary`
 - URL: <https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf>
@@ -233,7 +247,7 @@ Repository maintainers should prefer official CDC, Florida state, AHCA, and CMS 
 - Why it matters:
   - useful if nursing home capacity, staffing, or quality fields are added
 
-### 17. CMS Provider Specific Data for Public Use
+### 18. CMS Provider Specific Data for Public Use
 
 - Title: `Provider Specific Data for Public Use in Text Format | CMS`
 - URL: <https://www.cms.gov/medicare/payment/prospective-payment-systems/provider-specific-data-public-use-text-format>

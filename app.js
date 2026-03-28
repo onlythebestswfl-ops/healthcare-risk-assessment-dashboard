@@ -2,6 +2,9 @@ const form = document.querySelector("#risk-form");
 const formMessage = document.querySelector("#form-message");
 const urbanSampleButton = document.querySelector("#urban-sample-button");
 const ruralSampleButton = document.querySelector("#rural-sample-button");
+const contextButton = document.querySelector("#context-button");
+const contextNote = document.querySelector("#context-note");
+const countyList = document.querySelector("#county-list");
 
 const fields = {
   organism: document.querySelector("#organism"),
@@ -21,6 +24,8 @@ const fields = {
   visibility: document.querySelector("#visibility"),
   baselineCompleteness: document.querySelector("#baseline-completeness")
 };
+
+let countyContext = null;
 
 const ui = {
   title: document.querySelector("#risk-title"),
@@ -162,6 +167,29 @@ function setList(target, items) {
     li.textContent = item;
     target.appendChild(li);
   });
+}
+
+function setCountyOptions(context) {
+  countyList.innerHTML = "";
+  Object.keys(context.counties).sort().forEach((county) => {
+    const option = document.createElement("option");
+    option.value = county;
+    countyList.appendChild(option);
+  });
+}
+
+async function loadCountyContext() {
+  try {
+    const response = await fetch("./data/florida_county_facility_context.json");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    countyContext = await response.json();
+    setCountyOptions(countyContext);
+    contextNote.textContent = `Official county facility context ready. Source: ${countyContext.source.name} (${new Date(countyContext.generated_at_utc).toLocaleDateString()}).`;
+  } catch (error) {
+    contextNote.textContent = "Official county facility context could not be loaded in this session.";
+  }
 }
 
 function confidenceDescriptor(score) {
@@ -396,6 +424,25 @@ function buildAssessment(values) {
   };
 }
 
+function applyOfficialCountyContext() {
+  const county = fields.county.value.trim();
+  if (!county) {
+    formMessage.textContent = "Enter a Florida county name before applying official context.";
+    return;
+  }
+
+  if (!countyContext || !countyContext.counties[county]) {
+    formMessage.textContent = "No official county facility context was found for that county name.";
+    return;
+  }
+
+  const context = countyContext.counties[county];
+  fields.acuteCare.value = `${context.acute_care_hospitals.facility_count}`;
+  fields.longTermCare.value = `${context.nursing_homes.facility_count}`;
+  contextNote.textContent = `${county}: ${context.acute_care_hospitals.facility_count} hospitals (${context.acute_care_hospitals.licensed_beds.toLocaleString()} licensed beds) and ${context.nursing_homes.facility_count} nursing homes (${context.nursing_homes.licensed_beds.toLocaleString()} licensed beds) from FloridaHealthFinder.`;
+  formMessage.textContent = "Official county facility context applied.";
+}
+
 function updateResults(result) {
   ui.title.textContent = result.title;
   ui.summary.textContent = result.summary;
@@ -472,4 +519,6 @@ ruralSampleButton.addEventListener("click", () => {
   });
 });
 
+contextButton.addEventListener("click", applyOfficialCountyContext);
 form.addEventListener("submit", handleSubmit);
+loadCountyContext();

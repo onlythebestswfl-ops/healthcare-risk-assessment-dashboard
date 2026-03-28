@@ -11,6 +11,7 @@ now a cleaner v1 architecture prototype that:
 - narrows scope to targeted healthcare-associated MDRO events
 - separates signal severity, spread potential, containment fragility, and confidence
 - escalates posture conservatively when key local data are weak or missing
+- can apply official county hospital and nursing-home counts from FloridaHealthFinder
 - links back to official CDC, Florida DOH, AHCA, and CMS source anchors
 
 ## Files
@@ -21,6 +22,8 @@ now a cleaner v1 architecture prototype that:
 - `V1_ARCHITECTURE.md`: architecture notes and source anchors
 - `REFERENCES.md`: formal source register and maintenance notes
 - `DATA_SOURCES.md`: lightweight capture list for likely data inputs
+- `data/florida_county_facility_context.json`: generated county hospital/nursing-home context
+- `scripts/fetch_florida_facility_context.py`: refresh script for official county facility context
 - `sourced-artifact.html`: preserved extracted Claude artifact
 
 ## Local preview

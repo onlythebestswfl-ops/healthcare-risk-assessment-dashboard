@@ -98,8 +98,9 @@
 
             <label class="field">
               <span>Florida county</span>
-              <input id="county" name="county" type="text" placeholder="e.g., Miami-Dade">
+              <input id="county" name="county" type="text" list="county-list" placeholder="e.g., Miami-Dade">
             </label>
+            <datalist id="county-list"></datalist>
 
             <div class="field-grid">
               <label class="field">
@@ -117,6 +118,13 @@
                 <input id="long-term-care" name="longTermCare" type="number" min="0" step="1" placeholder="e.g., 120">
               </label>
             </div>
+
+            <div class="context-actions">
+              <button type="button" class="ghost-button small-button" id="context-button">Apply Official County Facility Context</button>
+            </div>
+            <p class="context-note" id="context-note">
+              Official county facility context can autofill acute care hospitals and nursing homes from FloridaHealthFinder.
+            </p>
 
             <label class="field">
               <span>Interfacility transfer intensity</span>
