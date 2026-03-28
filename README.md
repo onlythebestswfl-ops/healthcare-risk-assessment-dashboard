@@ -20,6 +20,7 @@ now a cleaner v1 architecture prototype that:
 - `styles.css`: dashboard styling
 - `V1_ARCHITECTURE.md`: architecture notes and source anchors
 - `REFERENCES.md`: formal source register and maintenance notes
+- `DATA_SOURCES.md`: lightweight capture list for likely data inputs
 - `sourced-artifact.html`: preserved extracted Claude artifact
 
 ## Local preview
