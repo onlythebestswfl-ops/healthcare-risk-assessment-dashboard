@@ -9,6 +9,7 @@ const countyList = document.querySelector("#county-list");
 const fields = {
   organism: document.querySelector("#organism"),
   detectionStatus: document.querySelector("#detection-status"),
+  confirmedCaseCount: document.querySelector("#confirmed-case-count"),
   eventPattern: document.querySelector("#event-pattern"),
   settingType: document.querySelector("#setting-type"),
   county: document.querySelector("#county"),
@@ -212,7 +213,7 @@ function postureLabel(index) {
 }
 
 function validate(values) {
-  const numericFields = ["population", "acuteCare", "longTermCare"];
+  const numericFields = ["confirmedCaseCount", "population", "acuteCare", "longTermCare"];
   const invalidNumeric = numericFields.find((key) => values[key] !== null && values[key] < 0);
   if (invalidNumeric) {
     formMessage.textContent = "Numeric fields must be zero or greater.";
@@ -224,6 +225,16 @@ function validate(values) {
     return false;
   }
 
+  if (values.detectionStatus !== "confirmed" && values.confirmedCaseCount > 0) {
+    formMessage.textContent = "Use the laboratory-confirmed case field only when detection status is confirmed, or leave it blank.";
+    return false;
+  }
+
+  if (values.eventPattern === "single" && values.confirmedCaseCount > 1) {
+    formMessage.textContent = "A single identified case cannot also have more than one laboratory-confirmed case.";
+    return false;
+  }
+
   formMessage.textContent = "Assessment updated.";
   return true;
 }
@@ -232,6 +243,7 @@ function collectValues() {
   return {
     organism: fields.organism.value,
     detectionStatus: fields.detectionStatus.value,
+    confirmedCaseCount: parseInteger(fields.confirmedCaseCount),
     eventPattern: fields.eventPattern.value,
     settingType: fields.settingType.value,
     county: fields.county.value.trim(),
@@ -247,6 +259,32 @@ function collectValues() {
     visibility: fields.visibility.value,
     baselineCompleteness: fields.baselineCompleteness.value
   };
+}
+
+function getConfirmedCasePoints(values, drivers) {
+  const caseCount = values.confirmedCaseCount;
+
+  if (caseCount === null || caseCount === 0) {
+    return 0;
+  }
+
+  if (caseCount === 1) {
+    drivers.push("One laboratory-confirmed case has been identified in the current event.");
+    return 4;
+  }
+
+  if (caseCount <= 3) {
+    drivers.push(`${caseCount} laboratory-confirmed cases indicate this event has moved beyond a single isolated detection.`);
+    return 10;
+  }
+
+  if (caseCount <= 9) {
+    drivers.push(`${caseCount} laboratory-confirmed cases suggest a substantial event requiring broader coordination.`);
+    return 16;
+  }
+
+  drivers.push(`${caseCount} laboratory-confirmed cases indicate a large active event signal.`);
+  return 22;
 }
 
 function getNetworkPoints(values, drivers, warnings) {
@@ -359,10 +397,12 @@ function buildAssessment(values) {
   const organism = organismProfiles[values.organism];
   const drivers = [];
   const warnings = [];
+  const confirmedCasePoints = getConfirmedCasePoints(values, drivers);
 
   const signalSeverity = clamp(
     organism.signalBase +
       scoreMaps.detectionStatus[values.detectionStatus] +
+      confirmedCasePoints +
       scoreMaps.eventPattern[values.eventPattern] +
       scoreMaps.settingType[values.settingType],
     0,
@@ -417,7 +457,7 @@ function buildAssessment(values) {
     posture: postureLabel(postureIndex),
     conservativeEscalation,
     title: `${organism.label} in ${countyLabel}`,
-    summary: `${organism.label} generates a ${signalSeverity >= 75 ? "high" : signalSeverity >= 50 ? "meaningful" : "lower"} intrinsic signal here. The recommended posture reflects the event itself, local spread conditions, containment fragility, and whether missing data forces caution.`,
+    summary: `${organism.label} generates a ${signalSeverity >= 75 ? "high" : signalSeverity >= 50 ? "meaningful" : "lower"} intrinsic signal here. The recommended posture reflects the event itself, ${values.confirmedCaseCount ? `${values.confirmedCaseCount} laboratory-confirmed case${values.confirmedCaseCount === 1 ? "" : "s"}, ` : ""}local spread conditions, containment fragility, and whether missing data forces caution.`,
     actions: actionList,
     drivers: drivers.slice(0, 5),
     warnings: warnings.length ? warnings : ["No major data warnings were triggered in this scenario."]
@@ -482,6 +522,7 @@ urbanSampleButton.addEventListener("click", () => {
   loadScenario({
     organism: "candida-auris",
     detectionStatus: "confirmed",
+    confirmedCaseCount: "1",
     eventPattern: "single",
     settingType: "mixed",
     county: "Miami-Dade",
@@ -503,6 +544,7 @@ ruralSampleButton.addEventListener("click", () => {
   loadScenario({
     organism: "candida-auris",
     detectionStatus: "suspected",
+    confirmedCaseCount: "",
     eventPattern: "single",
     settingType: "ltc",
     county: "Rural North Florida example",
